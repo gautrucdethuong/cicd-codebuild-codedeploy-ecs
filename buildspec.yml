@@ -9,8 +9,8 @@ phases:
     commands:
       - echo "Connecting in to AWS ECR..."
       - aws --version
-      # - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      # - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin
       - echo $AWS_DEFAULT_REGION
       - REPOSITORY_URI=public.ecr.aws/t0f6k3k5/nodejs-ecr-codebuild
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
@@ -27,8 +27,8 @@ phases:
   post_build:
     commands:
       - echo "Pushing the image to ECR..."
-      # - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/t0f6k3k5
-      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin
+      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/t0f6k3k5
+      # - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - printf '[{"name":"simple-app","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinition.json
