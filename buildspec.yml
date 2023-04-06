@@ -7,7 +7,7 @@ phases:
       - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   pre_build:
     commands:
-      - echo Connecting in to AWS ECR...
+      - echo "PRE-BUILD =>>>> Connecting in to AWS ECR..."
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - REPOSITORY_URI=public.ecr.aws/t0f6k3k5/nodejs-ecr-codebuild
@@ -15,13 +15,18 @@ phases:
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
-      - echo "Building the application..."
+      - echo "BUILD =>>>> Building the application..."
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
-      - echo "Pushing the image to ECR..."
-      - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/t0f6k3k5
+      - echo "POST-BUILD =>>>> Pushing the image to ECR..."
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo Writing iamge definition file...
+      - printf '[{"name":"simple-app","imageUri":"%s"}]'
+        $REPOSITORY_URI:$IMAGE_TAG > imagedefinition.json
+      - cat imagedefinition.json
+  artifacts:
+    file: imagedefinition.json
