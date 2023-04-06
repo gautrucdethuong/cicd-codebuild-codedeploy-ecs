@@ -1,8 +1,11 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
   pre_build:
-  
     commands:
       - echo Connecting in to AWS ECR...
       - aws --version
@@ -14,7 +17,6 @@ phases:
     commands:
       - echo "Building the application..."
       - echo Building the Docker image...
-      - systemctl start docker
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
