@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     const containerName = os.hostname();
     console.log('Hello Amazon ECS from Minhhn');
     res.json({
-        serviceName: 'Minhhn ECS demo',
+        serviceName: 'Minhhn ECS demo 333',
         contact: 'study-aws@gmail.com',
         clientIp: clientIp,
         albIp: albIp,
