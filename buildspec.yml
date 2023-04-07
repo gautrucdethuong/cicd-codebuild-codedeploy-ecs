@@ -12,7 +12,7 @@ phases:
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       # - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin
       - echo $AWS_DEFAULT_REGION
-      - REPOSITORY_URI=public.ecr.aws/t0f6k3k5/nodejs-ecr-codebuild
+      - REPOSITORY_URI=public.ecr.aws/t0f6k3k5/codebuild-ecr-fargate
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
       # - echo $REPOSITORY_URI
