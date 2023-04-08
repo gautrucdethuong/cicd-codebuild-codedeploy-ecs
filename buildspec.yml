@@ -20,4 +20,4 @@ phases:
       - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imagedefinition.json
       - cat imagedefinition.json
 artifacts:
-  file: imagedefinition.json
+  files: imagedefinition.json
