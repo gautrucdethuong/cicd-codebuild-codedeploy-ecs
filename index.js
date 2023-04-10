@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     const containerName = os.hostname();
     console.log('Hello Amazon ECS + CICD from Minhhn Version 2');
     res.json({
-        serviceName: 'Root ECS demo CICD Version 2',
+        serviceName: 'Hello everyone, how are you to day??',
         contact: 'study-aws@gmail.com',
         clientIp: clientIp,
         albIp: albIp,
